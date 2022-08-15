@@ -1,7 +1,11 @@
 # SQL-Employee-tracker
-GIVEN a command-line application that accepts user input
-WHEN I start the application
-THEN I am presented with the following options: view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role
+
+## Table of contents
+- [User Story](README.md/#UserStory)
+- [Technology Used](README.md/#TechnologyUsed)
+- [Instructions Before Use](README.md/#InstructionsBeforeUse)
+
+## User Story
 WHEN I choose to view all departments
 THEN I am presented with a formatted table showing department names and department ids
 WHEN I choose to view all roles
@@ -16,3 +20,18 @@ WHEN I choose to add an employee
 THEN I am prompted to enter the employee’s first name, last name, role, and manager, and that employee is added to the database
 WHEN I choose to update an employee role
 THEN I am prompted to select an employee to update and their new role and this information is updated in the database
+## Technology Used
+- node.js
+- Inquirer Package
+- MySQL2 Package
+- console.table Package
+- dotenv
+## Instructions Before Use
+You must first initialize NPM and install the packages listed above.
+Also create a .env file at the root of the directory with your MySQL credetials using the following variables
+DATABASE_NAME=
+DATABASE_USERNAME=
+PASSWORD=
+then to run the application in the CLI enter "npm start"
+## Screen shot of application
+![image](https://user-images.githubusercontent.com/98612225/184693035-0aeb7a9b-8e80-4f16-9567-d69461a0b7c8.png)
