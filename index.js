@@ -26,41 +26,64 @@ function startPrompt() {
         name: "option",
         choices: [
           "View all departments",
-          "view all roles",
-          "view all employees",
+          "View all roles",
+          "View all employees",
           // new inquirer.Separator("---Add---"),
           "Add a department",
-          "add a role",
-          "add an employee",
-          "update and employee role",
-          "exit",
+          "Add a role",
+          "Add an employee",
+          "Update an employee role",
+          "EXIT",
           //new inquirer.Separator("---view---"),
         ],
       },
     ])
-    .then(( answer ) => {
-      if ((answer = "View all departments")) {
+    
+    .then((answer) => {
+      if ((answer.option == "View all departments")) {
         viewAllDepartments();
-        console.table(["Departments"]);
       }
-      //   if ((answer = "view all roles")) {
-      //     console.table(["Roles"], roles);
-      //   }
-      //   if ((answer = "view all employees")) {
-      //     console.table(["Employees"], employees);
-      //   }
-      if ((answer = "Add a department")) {
+      else if ((answer.option == "View all roles")) {
+        viewAllRoles();
+      }
+      else if ((answer.option == "View all employees")) {
+        viewAllEmployees;
+      }
+      else if ((answer.option == "Add a department")) {
         addDepartment();
       }
-    //   if ((answer = "exit")) {
-    //     db.end();
-    //   }
+      else if ((answer.option == "Add a role")) {
+        addRole();
+      }
+      else if ((answer.option == "Add an employee")) {
+        addEmployee();
+      }
+      else if ((answer.option == "Update an employee role")) {
+        updateEmployeeRole();
+      }
+      else if ((answer.option == "EXIT")) {
+        db.end();
+      }
+      else {db.end();}
     });
 }
-
+// All query functions
 const viewAllDepartments = () => {
   db.query("SELECT * FROM department", (err, res) => {
     console.table(res);
+    startPrompt();
+  });
+};
+const viewAllRoles = () => {
+  db.query("SELECT * FROM role", (err, res) => {
+    console.table(res);
+    startPrompt();
+  });
+};
+const viewAllEmployees = () => {
+  db.query("SELECT * FROM employee", (err, res) => {
+    console.table(res);
+    console.log(err)
     startPrompt();
   });
 };
@@ -70,18 +93,71 @@ const addDepartment = () => {
       {
         type: "input",
         message: "What department would you like to add?",
-        name: "addDepartmentConfirm"
-      }
+        name: "addDepartmentConfirm",
+      },
     ])
-    .then(( addDepartmentConfirm ) => {
+    .then((answer) => {
       //const test = "INSERT INTO department (name) VALUES ? ',('addDepartmentConfirm')"
-    //   console.log(test)
-        db.query("INSERT INTO department SET name = '"+ (addDepartmentConfirm.addDepartmentConfirm) + "'", function(err, res) {
-            console.log(err)
-            console.log(addDepartmentConfirm.addDepartmentConfirm)
-        });
+      //   console.log(test)
+      db.query(
+        "INSERT INTO department SET name = '" +
+          answer.addDepartmentConfirm +
+          "'",
+        function (err, res) {
+          console.log(err);
+          console.log(answer.addDepartmentConfirm);
+        }
+      );
       console.log("Department has been added");
       viewAllDepartments();
     });
 };
+const addRole = () => {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "What role would you like to add?",
+        name: "addRoleConfirm",
+      },
+    ])
+    .then((answer) => {
+      db.query(
+        "INSERT INTO role SET title = '" + answer.addRoleConfirm + "'",
+        function (err, res) {
+          console.log(err);
+          console.log(answer.addRoleConfirm);
+        }
+      );
+      console.log("Role has been added");
+      viewAllRoles();
+    });
+};
+const addEmployee = () => {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "What is the employees first name?",
+        name: "firstName",
+      },
+      {
+        type: "input",
+        message: "What is the employees last name?",
+        name: "lastName",
+      },
+    ])
+    .then((answers) => {
+      db.query(
+        "INSERT INTO employee(first_name, last_name) VALUES ('" + answers.firstName + "', '" + answers.lastName + "')",
+        function (err, res) {
+          console.log(err);
+          console.log(answers.addRoleConfirm);
+        }
+      );
+      console.log("Role has been added");
+      viewAllEmployees();
+    });
+};
+const updateEmployeeRole = () => {};
 startPrompt();
