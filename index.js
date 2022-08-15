@@ -1,6 +1,7 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
 require("dotenv").config();
+// Connecting to the database using the .env variables
 const db = mysql.createConnection(
   {
     host: "localhost",
@@ -18,6 +19,7 @@ const db = mysql.createConnection(
 
 const cTable = require("console.table");
 function startPrompt() {
+    // This start prompt is used to decide what the user wants to do
   inquirer
     .prompt([
       {
@@ -38,7 +40,7 @@ function startPrompt() {
         ],
       },
     ])
-
+// It then takes the answer from the prompt and depending on the answer it will execute the corisponding function 
     .then((answer) => {
       if (answer.option == "View all departments") {
         viewAllDepartments();
@@ -128,6 +130,7 @@ const addRole = () => {
     });
 };
 const addEmployee = () => {
+    // This prompt asks for the first and last name of the new employee
   inquirer
     .prompt([
       {
@@ -141,6 +144,7 @@ const addEmployee = () => {
         name: "lastName",
       },
     ])
+    // then it takes that information and plugs it into a query
     .then((answers) => {
       db.query(
         "INSERT INTO employee(first_name, last_name) VALUES ('" +
@@ -154,10 +158,12 @@ const addEmployee = () => {
         }
       );
       console.log("Role has been added");
+    //  Then It will print out the employees so you can see you added them to the database
       viewAllEmployees();
     });
 };
 const updateEmployeeRole = () => {
+    // this prompt asks for the employees Id number and for the Role ID you would like to change it to
   inquirer
     .prompt([
       {
@@ -171,6 +177,7 @@ const updateEmployeeRole = () => {
         name: "updatedRoleNum",
       },
     ])
+    // Then it plugs that information into a query statement
    .then((answers) => {
     db.query(
         "UPDATE employee SET role_id = " +
