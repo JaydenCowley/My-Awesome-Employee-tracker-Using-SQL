@@ -38,33 +38,27 @@ function startPrompt() {
         ],
       },
     ])
-    
+
     .then((answer) => {
-      if ((answer.option == "View all departments")) {
+      if (answer.option == "View all departments") {
         viewAllDepartments();
-      }
-      else if ((answer.option == "View all roles")) {
+      } else if (answer.option == "View all roles") {
         viewAllRoles();
-      }
-      else if ((answer.option == "View all employees")) {
-        viewAllEmployees;
-      }
-      else if ((answer.option == "Add a department")) {
+      } else if (answer.option == "View all employees") {
+        viewAllEmployees();
+      } else if (answer.option == "Add a department") {
         addDepartment();
-      }
-      else if ((answer.option == "Add a role")) {
+      } else if (answer.option == "Add a role") {
         addRole();
-      }
-      else if ((answer.option == "Add an employee")) {
+      } else if (answer.option == "Add an employee") {
         addEmployee();
-      }
-      else if ((answer.option == "Update an employee role")) {
+      } else if (answer.option == "Update an employee role") {
         updateEmployeeRole();
-      }
-      else if ((answer.option == "EXIT")) {
+      } else if (answer.option == "EXIT") {
+        db.end();
+      } else {
         db.end();
       }
-      else {db.end();}
     });
 }
 // All query functions
@@ -83,7 +77,7 @@ const viewAllRoles = () => {
 const viewAllEmployees = () => {
   db.query("SELECT * FROM employee", (err, res) => {
     console.table(res);
-    console.log(err)
+    console.log(err);
     startPrompt();
   });
 };
@@ -149,7 +143,11 @@ const addEmployee = () => {
     ])
     .then((answers) => {
       db.query(
-        "INSERT INTO employee(first_name, last_name) VALUES ('" + answers.firstName + "', '" + answers.lastName + "')",
+        "INSERT INTO employee(first_name, last_name) VALUES ('" +
+          answers.firstName +
+          "', '" +
+          answers.lastName +
+          "')",
         function (err, res) {
           console.log(err);
           console.log(answers.addRoleConfirm);
@@ -159,5 +157,29 @@ const addEmployee = () => {
       viewAllEmployees();
     });
 };
-const updateEmployeeRole = () => {};
+const updateEmployeeRole = () => {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "Enter the Employees ID number",
+        name: "employeeIdNum",
+      },
+      {
+        type: "input",
+        message: "Enter the NEW Role number for the selected employee",
+        name: "updatedRoleNum",
+      },
+    ])
+   .then((answers) => {
+    db.query(
+        "UPDATE employee SET role_id = " +
+          answers.updatedRoleNum +
+          " WHERE id = " +
+          answers.employeeIdNum
+    );
+    console.log("Role has been updated")
+    viewAllEmployees();
+   })
+};
 startPrompt();
